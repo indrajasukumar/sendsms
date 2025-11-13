@@ -1,5 +1,5 @@
 
-# Ex.No:3 Design an android application Send SMS using Intent.
+# Ex.No:6 Design an android application Send SMS using Intent.
 
 
 ## AIM:
@@ -30,141 +30,72 @@ Step 7: Save and run the application.
 ```
 /*
 Program to create and design an android application Send SMS using Intent.
-Developed by: INDRAJA S
-Registeration Number : 212222043003
+Developed by:RAJKIRAN J
+Registeration Number : 212222043006
 */
 ```
+## MainActivity.java:
+```
+package com.example.ex3;
 
-## activity_main.xml
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Button mbutton=(Button) findViewById(R.id.smsButton);
+        mbutton.setOnClickListener(new View.OnClickListener() 
+            @Override
+            public void onClick(View view) {
+                Intent intent =new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms","2596118700",null));
+                intent.putExtra("sms_body","SMS using Intent");
+                startActivity(intent);
+            }
+        });
+
+    }
+}
 
 ```
+
+## Activity_main.xml:
+```
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <EditText
-        android:id="@+id/etNumber"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Enter phone number"
-        android:inputType="phone"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_margin="16dp"/>
-
-    <EditText
-        android:id="@+id/etMessage"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Enter your message"
-        android:inputType="textMultiLine"
-        app:layout_constraintTop_toBottomOf="@id/etNumber"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_margin="16dp"/>
-
     <Button
-        android:id="@+id/btnSend"
+        android:id="@+id/smsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send SMS"
-        app:layout_constraintTop_toBottomOf="@id/etMessage"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="20dp"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
-```
+        android:backgroundTint="@color/design_default_color_secondary"
+        android:text="send sms"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
 
-## MainActivity.java
+</RelativeLayout>
 
 ```
-package com.example.sendsms;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.telephony.SmsManager;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
-
-public class MainActivity extends AppCompatActivity {
-
-    EditText etNumber, etMessage;
-    Button btnSend;
-    private static final int SMS_PERMISSION_CODE = 100;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        etNumber = findViewById(R.id.etNumber);
-        etMessage = findViewById(R.id.etMessage);
-        btnSend = findViewById(R.id.btnSend);
-
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkSelfPermission(Manifest.permission.SEND_SMS)
-                        == PackageManager.PERMISSION_GRANTED) {
-                    sendSMS();
-                } else {
-                    requestPermissions(new String[]{Manifest.permission.SEND_SMS}, SMS_PERMISSION_CODE);
-                }
-            }
-        });
-    }
-
-    private void sendSMS() {
-        String phone = etNumber.getText().toString().trim();
-        String message = etMessage.getText().toString().trim();
-
-        if (!phone.isEmpty() && !message.isEmpty()) {
-            try {
-                SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(phone, null, message, null, null);
-                Toast.makeText(this, "SMS Sent!", Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                Toast.makeText(this, "Failed to send SMS", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(this, "Enter number and message", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == SMS_PERMISSION_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            sendSMS();
-        } else {
-            Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
-        }
-    }
-}
-```
-
-## Androidmanifest.xml
-
+## AndroidMainfest.xml
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <uses-feature
-        android:name="android.hardware.telephony"
-        android:required="false" />
-    <uses-permission android:name="android.permission.SEND_SMS"></uses-permission>
 
     <application
         android:allowBackup="true"
@@ -174,7 +105,8 @@ public class MainActivity extends AppCompatActivity {
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SendSMS">
+        android:theme="@style/Theme.Ex3"
+        tools:targetApi="31">
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -187,11 +119,12 @@ public class MainActivity extends AppCompatActivity {
     </application>
 
 </manifest>
+
 ```
 ## OUTPUT
+<img width="1920" height="1080" alt="314393670-bd5acb2c-4cd6-4b2c-b62e-b1969298e433" src="https://github.com/user-attachments/assets/63793cf3-f128-4302-bb66-6eba5b13f67d" />
 
-<img width="1919" height="1199" alt="Screenshot 2025-09-16 075627" src="https://github.com/user-attachments/assets/815c27a2-73c1-46ac-8c17-1bfa43f50715" />
-<img width="1919" height="1199" alt="Screenshot 2025-09-16 075640" src="https://github.com/user-attachments/assets/8d2102c6-8785-4258-8488-0557ddcea4fe" />
+<img width="1920" height="1080" alt="314393698-7f62ac04-8b8d-4bbf-9475-ec5ec6825f0c" src="https://github.com/user-attachments/assets/b22b52c9-d4b0-4c67-88a1-22134b8d633e" />
 
 
 ## RESULT
